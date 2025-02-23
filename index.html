@@ -1,0 +1,296 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Listing Website</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Reset and Basic Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+
+        /* Header Styles */
+        .header {
+            background-color: #2c3e50;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            margin-bottom: 10px;
+        }
+
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            margin-right: 10px;
+            width: 60%;
+            max-width: 400px;
+        }
+
+        .search-button {
+            background-color: #e67e22;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-button:hover {
+            background-color: #d35400;
+        }
+
+        /* Filter Styles */
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .filter-button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .filter-button:hover, .filter-button.active {
+            background-color: #2980b9;
+        }
+
+        .filter-button[data-type="full-time"] { background-color: #3498db; }
+        .filter-button[data-type="part-time"] { background-color: #2ecc71; }
+        .filter-button[data-type="remote"] { background-color: #9b59b6; }
+
+        /* Job Card Styles */
+        .job-listings {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .job-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .job-title {
+            font-size: 1.25em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .company-name {
+            font-size: 1em;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+
+        .location {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+
+        .job-type {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            color: #fff;
+        }
+
+        .job-type.full-time { background-color: #3498db; }
+        .job-type.part-time { background-color: #2ecc71; }
+        .job-type.remote { background-color: #9b59b6; }
+
+        /* Save Button */
+        .save-button {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: transparent;
+            border: none;
+            font-size: 1.2em;
+            color: #7f8c8d;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .save-button:hover {
+            color: #e67e22;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .search-input {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .filters {
+                flex-wrap: wrap;
+            }
+
+            .filter-button {
+                flex-grow: 1;
+            }
+        }
+
+        /* Accessibility */
+        [aria-label] {
+            position: relative;
+        }
+
+        [aria-label]:hover::after,
+        [aria-label]:focus::after {
+            content: attr(aria-label);
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: #fff;
+            padding: 5px;
+            border-radius: 4px;
+            white-space: nowrap;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Job Listings</h1>
+        <div class="search-bar">
+            <input type="text" class="search-input" placeholder="Search jobs..." aria-label="Search Jobs">
+            <button class="search-button">Search</button>
+        </div>
+        <div class="filters">
+            <button class="filter-button" data-type="full-time" aria-label="Filter Full-Time Jobs">Full-Time</button>
+            <button class="filter-button" data-type="part-time" aria-label="Filter Part-Time Jobs">Part-Time</button>
+            <button class="filter-button" data-type="remote" aria-label="Filter Remote Jobs">Remote</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="job-listings">
+            <!-- Job Cards will be added here dynamically -->
+        </div>
+    </div>
+
+    <script>
+        const jobs = [
+            { title: "Software Engineer", company: "Tech Corp", location: "San Francisco, CA", type: "full-time" },
+            { title: "Data Analyst", company: "Data Insights", location: "New York, NY", type: "part-time" },
+            { title: "Web Developer", company: "Web Solutions", location: "Remote", type: "remote" },
+            { title: "UX Designer", company: "Creative Designs", location: "Remote", type: "remote" },
+            { title: "Project Manager", company: "ManageAll Inc.", location: "Chicago, IL", type: "full-time" }
+        ];
+
+        const jobListings = document.querySelector('.job-listings');
+        const filterButtons = document.querySelectorAll('.filter-button');
+        const searchInput = document.querySelector('.search-input');
+        const searchButton = document.querySelector('.search-button');
+
+        function displayJobs(jobsToDisplay) {
+            jobListings.innerHTML = '';
+            jobsToDisplay.forEach(job => {
+                const jobCard = document.createElement('div');
+                jobCard.classList.add('job-card');
+                jobCard.innerHTML = `
+                    <h2 class="job-title">${job.title}</h2>
+                    <p class="company-name">${job.company}</p>
+                    <p class="location">${job.location}</p>
+                    <span class="job-type ${job.type}">${job.type}</span>
+                    <button class="save-button" aria-label="Save Job"><i class="far fa-bookmark"></i></button>
+                `;
+                jobListings.appendChild(jobCard);
+            });
+        }
+
+        function filterJobs(type) {
+            filterButtons.forEach(button => button.classList.remove('active'));
+            const activeButton = document.querySelector(`.filter-button[data-type="${type}"]`);
+            if (activeButton) activeButton.classList.add('active');
+
+            const filteredJobs = type ? jobs.filter(job => job.type === type) : jobs;
+            displayJobs(filteredJobs);
+        }
+
+        function searchJobs() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const searchedJobs = jobs.filter(job =>
+                job.title.toLowerCase().includes(searchTerm) ||
+                job.company.toLowerCase().includes(searchTerm) ||
+                job.location.toLowerCase().includes(searchTerm)
+            );
+            displayJobs(searchedJobs);
+        }
+
+        // Initial display
+        displayJobs(jobs);
+
+        // Event Listeners
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => filterJobs(button.dataset.type));
+        });
+
+        searchButton.addEventListener('click', searchJobs);
+        searchInput.addEventListener('keyup', (event) => {
+            if (event.key === 'Enter') searchJobs();
+        });
+    </script>
+</body>
+</html>
